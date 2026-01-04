@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khan Properties CRM System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #000;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            margin-right: 5px;
+        }
+
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        thead {
+            background: #667eea;
+            color: white;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-new { background: #d1ecf1; color: #0c5460; }
+        .status-contacted { background: #fff3cd; color: #856404; }
+        .status-viewing { background: #cce5ff; color: #004085; }
+        .status-negotiating { background: #d4edda; color: #155724; }
+        .status-closed { background: #28a745; color: white; }
+        .status-lost { background: #f8d7da; color: #721c24; }
+        
+        .priority-high { color: #dc3545; font-weight: bold; }
+        .priority-medium { color: #ffc107; font-weight: bold; }
+        .priority-low { color: #6c757d; }
+        
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .export-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .instructions {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+  
+  <body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Khan Properties CRM</h1>
+            <p>Lead Tracking & Sales Management System</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="tab" onclick="showTab('add-lead')">➕ Add Lead</button>
+            <button class="tab" onclick="showTab('leads')">📋 All Leads</button>
+            <button class="tab" onclick="showTab('analytics')">📈 Analytics</button>
+            <button class="tab" onclick="showTab('instructions')">📖 Instructions</button>
+        </div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Leads</h3>
+                    <div class="value" id="totalLeads">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Leads</h3>
+                    <div class="value" id="activeLeads">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Deals Closed</h3>
+                    <div class="value" id="closedDeals">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Conversion Rate</h3>
+                    <div class="value" id="conversionRate">0%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="value" id="totalRevenue">AED 0</div>
+                </div>
+            </div>
+            
+            <h2 style="margin-bottom: 15px;">Recent Activity</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Client Name</th>
+                            <th>Status</th>
+                            <th>Source</th>
+                            <th>Next Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivity">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 30px; color: #6c757d;">
+                                No leads yet. Add your first lead to get started!
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Add Lead Tab -->
+        <div id="add-lead" class="tab-content">
+            <div class="form-section">
+                <h2 id="formTitle">Add New Lead</h2>
+                <form id="leadForm">
+                    <input type="hidden" id="editLeadId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Client Name *</label>
+                            <input type="text" id="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Lead Source *</label>
+                            <select id="source" required>
+                                <option value="">Select Source</option>
+                                <option value="Bayut">Bayut</option>
+                                <option value="Property Finder">Property Finder</option>
+                                <option value="Dubizzle">Dubizzle</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Walk-in">Walk-in</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Property Type</label>
+                            <select id="propertyType">
+                                <option value="">Select Type</option>
+                                <option value="Studio">Studio</option>
+                                <option value="1BR">1 Bedroom</option>
+                                <option value="2BR">2 Bedroom</option>
+                                <option value="3BR">3 Bedroom</option>
+                                <option value="Villa">Villa</option>
+                                <option value="Penthouse">Penthouse</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Budget (AED/year)</label>
+                            <input type="number" id="budget">
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Area</label>
+                            <input type="text" id="area" placeholder="e.g., Dubai Marina, JBR">
+                        </div>
+                        <div class="form-group">
+                            <label>Move-in Date</label>
+                            <input type="date" id="moveDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Status *</label>
+                            <select id="status" required>
+                                <option value="New">New Lead</option>
+                                <option value="Contacted">Contacted</option>
+                                <option value="Viewing Scheduled">Viewing Scheduled</option>
+                                <option value="Viewing Done">Viewing Done</option>
+                                <option value="Negotiating">Negotiating</option>
+                                <option value="Closed">Closed - Won</option>
+                                <option value="Lost">Closed - Lost</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select id="priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Commission (if closed)</label>
+                            <input type="number" id="commission" placeholder="AED">
+                        </div>
+                        <div class="form-group">
+                            <label>Next Follow-up Date</label>
+                            <input type="date" id="followupDate">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="notes" placeholder="Any additional information about the client or requirement..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="submitBtn">💾 Save Lead</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">🔄 Clear Form</button>
+                </form>
+            </div>
+        </div>
+  
+  <!-- All Leads Tab -->
+        <div id="leads" class="tab-content">
+            <div class="search-bar">
+                <input type="text" id="searchLeads" placeholder="🔍 Search by name, phone, or area..." onkeyup="searchLeads()">
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h2>All Leads (<span id="leadCount">0</span>)</h2>
+                <div>
+                    <select id="filterStatus" onchange="filterLeads()" style="padding: 8px; border-radius: 5px; border: 2px solid #dee2e6;">
+                        <option value="">All Statuses</option>
+                        <option value="New">New Lead</option>
+                        <option value="Contacted">Contacted</option>
+                        <option value="Viewing Scheduled">Viewing Scheduled</option>
+                        <option value="Viewing Done">Viewing Done</option>
+                        <option value="Negotiating">Negotiating</option>
+                        <option value="Closed">Closed - Won</option>
+                        <option value="Lost">Closed - Lost</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Client Name</th>
+                            <th>Phone</th>
+                            <th>Source</th>
+                            <th>Property</th>
+                            <th>Budget</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTableBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 30px; color: #6c757d;">
+                                No leads found. Start adding leads to see them here!
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <h2 style="margin-bottom: 20px;">Performance Analytics</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Response Time</h3>
+                    <div class="value" id="avgResponseTime">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Viewing to Close</h3>
+                    <div class="value" id="viewingToClose">0%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Best Lead Source</h3>
+                    <div class="value" id="bestSource" style="font-size: 1.5em;">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg Deal Value</h3>
+                    <div class="value" id="avgDealValue">AED 0</div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Leads by Source</h3>
+                <div id="sourceBreakdown" style="margin-top: 15px;"></div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Leads by Status</h3>
+                <div id="statusBreakdown" style="margin-top: 15px;"></div>
+            </div>
+            
+            <div class="export-section">
+                <h3>📥 Export Data</h3>
+                <p style="margin: 10px 0; color: #6c757d;">Download your CRM data for backup or analysis in Excel/Google Sheets</p>
+                <button class="btn btn-primary" onclick="exportToCSV()">📥 Export to CSV</button>
+                <button class="btn btn-secondary" onclick="exportToJSON()">📥 Export to JSON (Backup)</button>
+            </div>
+        </div>
+        
+        <!-- Instructions Tab -->
+        <div id="instructions" class="tab-content">
+            <div class="instructions">
+                <h3>🎯 How to Use This CRM System</h3>
+                <ul>
+                    <li><strong>Dashboard:</strong> View your key metrics and recent activity at a glance</li>
+                    <li><strong>Add Lead:</strong> Record every inquiry immediately - the faster you log it, the better you track it</li>
+                    <li><strong>All Leads:</strong> View, search, and filter all your leads. Click Edit to update or Delete to remove</li>
+                    <li><strong>Analytics:</strong> Track which sources work best and monitor your conversion rates</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>📝 Best Practices</h3>
+                <ul>
+                    <li><strong>Log Immediately:</strong> Add every lead within 5 minutes of receiving it</li>
+                    <li><strong>Update Status:</strong> Change status after every interaction (contacted, viewing done, etc.)</li>
+                    <li><strong>Set Follow-ups:</strong> Always set a next follow-up date - check it daily</li>
+                    <li><strong>Add Notes:</strong> Record important details, preferences, objections</li>
+                    <li><strong>Track Commission:</strong> Log commission amount when deal closes</li>
+                    <li><strong>Review Weekly:</strong> Check analytics every Friday to see what's working</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>💡 Quick Tips</h3>
+                <ul>
+                    <li>Use the search bar to quickly find a client by name or phone</li>
+                    <li>Filter by status to see all leads that need follow-up</li>
+                    <li>High priority leads should be followed up within 24 hours</li>
+                    <li>Export your data weekly as backup (use JSON for complete backup)</li>
+                    <li>This data is stored locally in your browser - bookmark this page!</li>
+                    <li>Click Edit on any lead to update details quickly</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>⚠️ Important Notes</h3>
+                <ul>
+                    <li><strong>Data Storage:</strong> All data is stored in your browser's local storage</li>
+                    <li><strong>Backup:</strong> Export data regularly - clearing browser data will delete records</li>
+                    <li><strong>Multi-Device:</strong> Data doesn't sync between devices - use one primary device</li>
+                    <li><strong>Upgrade Path:</strong> When ready, migrate to Zoho CRM or HubSpot for multi-user access</li>
+                    <li><strong>Browser Compatibility:</strong> Works best on Chrome, Firefox, Safari, Edge</li>
+                </ul>
+            </div>
+
+            <div class="instructions">
+                <h3>🚀 Getting Started Guide</h3>
+                <ul>
+                    <li><strong>Step 1:</strong> Save this HTML file and bookmark it in your browser</li>
+                    <li><strong>Step 2:</strong> Add your first lead using the "Add Lead" tab</li>
+                    <li><strong>Step 3:</strong> Update lead status as you progress through your sales process</li>
+                    <li><strong>Step 4:</strong> Check Dashboard daily to track your performance</li>
+                    <li><strong>Step 5:</strong> Review Analytics weekly to optimize your lead sources</li>
+                    <li><strong>Step 6:</strong> Export data every Friday as backup</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  <script>
+        let leads = [];
+        let editingLeadId = null;
+        let currentFilter = '';
+        
+        // Load leads from storage on page load
+        window.onload = function() {
+            loadLeads();
+            updateDashboard();
+            displayLeads();
+            updateAnalytics();
+        };
+        
+        // Tab switching function
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+
+            if (tabName === 'add-lead' && !editingLeadId) {
+                cancelEdit();
+            }
+
+            if (tabName === 'analytics') {
+                updateAnalytics();
+            }
+        }
+        
+        // Load leads from local storage
+        function loadLeads() {
+            const stored = localStorage.getItem('khanPropertiesLeads');
+            if (stored) {
+                try {
+                    leads = JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error loading leads:', e);
+                    leads = [];
+                }
+            }
+        }
+        
+        // Save leads to local storage
+        function saveLeads() {
+            try {
+                localStorage.setItem('khanPropertiesLeads', JSON.stringify(leads));
+                return true;
+            } catch (e) {
+                console.error('Error saving leads:', e);
+                alert('⚠️ Error saving data. Storage might be full.');
+                return false;
+            }
+        }
+        
+        // Add or Update lead
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const leadData = {
+                date: new Date().toISOString().split('T')[0],
+                clientName: document.getElementById('clientName').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                source: document.getElementById('source').value,
+                propertyType: document.getElementById('propertyType').value,
+                budget: document.getElementById('budget').value,
+                area: document.getElementById('area').value.trim(),
+                moveDate: document.getElementById('moveDate').value,
+                status: document.getElementById('status').value,
+                priority: document.getElementById('priority').value,
+                commission: document.getElementById('commission').value,
+                followupDate: document.getElementById('followupDate').value,
+                notes: document.getElementById('notes').value.trim()
+            };
+
+            if (editingLeadId) {
+                // Update existing lead
+                const index = leads.findIndex(l => l.id === editingLeadId);
+                if (index !== -1) {
+                    leads[index] = { ...leads[index], ...leadData };
+                    alert('✅ Lead updated successfully!');
+                }
+                editingLeadId = null;
+            } else {
+                // Add new lead
+                const lead = {
+                    id: Date.now(),
+                    ...leadData
+                };
+                leads.push(lead);
+                alert('✅ Lead added successfully!');
+            }
+            
+            if (saveLeads()) {
+                document.getElementById('leadForm').reset();
+                document.getElementById('submitBtn').textContent = '💾 Save Lead';
+                document.getElementById('formTitle').textContent = 'Add New Lead';
+                
+                updateDashboard();
+                displayLeads();
+                updateAnalytics();
+                
+                // Switch to leads tab
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.querySelectorAll('.tab')[2].classList.add('active');
+                document.getElementById('leads').classList.add('active');
+            }
+        });
+
+        // Edit lead function
+        function editLead(id) {
+            const lead = leads.find(l => l.id === id);
+            if (!lead) return;
+
+            editingLeadId = id;
+
+            // Fill form with lead data
+            document.getElementById('clientName').value = lead.clientName;
+            document.getElementById('phone').value = lead.phone;
+            document.getElementById('email').value = lead.email || '';
+            document.getElementById('source').value = lead.source;
+            document.getElementById('propertyType').value = lead.propertyType || '';
+            document.getElementById('budget').value = lead.budget || '';
+            document.getElementById('area').value = lead.area || '';
+            document.getElementById('moveDate').value = lead.moveDate || '';
+            document.getElementById('status').value = lead.status;
+            document.getElementById('priority').value = lead.priority;
+            document.getElementById('commission').value = lead.commission || '';
+            document.getElementById('followupDate').value = lead.followupDate || '';
+            document.getElementById('notes').value = lead.notes || '';
+
+            document.getElementById('submitBtn').textContent = '✏️ Update Lead';
+            document.getElementById('formTitle').textContent = 'Edit Lead';
+
+            // Switch to add-lead tab
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('add-lead').classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cancel edit function
+        function cancelEdit() {
+            editingLeadId = null;
+            document.getElementById('leadForm').reset();
+            document.getElementById('submitBtn').textContent = '💾 Save Lead';
+            document.getElementById('formTitle').textContent = 'Add New Lead';
+        }
+
+        // Delete lead function
+        function deleteLead(id) {
+            const lead = leads.find(l => l.id === id);
+            if (!lead) return;
+
+            if (confirm(`Are you sure you want to delete lead for ${lead.clientName}?`)) {
+                leads = leads.filter(l => l.id !== id);
+                if (saveLeads()) {
+                    updateDashboard();
+                    displayLeads();
+                    updateAnalytics();
+                    alert('✅ Lead deleted successfully!');
+                }
+            }
+        }
+        
+        // Update dashboard statistics
+        function updateDashboard() {
+            const total = leads.length;
+            const active = leads.filter(l => !['Closed', 'Lost'].includes(l.status)).length;
+            const closed = leads.filter(l => l.status === 'Closed').length;
+            const conversion = total > 0 ? ((closed / total) * 100).toFixed(1) : 0;
+            const revenue = leads.filter(l => l.status === 'Closed' && l.commission)
+                                 .reduce((sum, l) => sum + parseFloat(l.commission), 0);
+            
+            document.getElementById('totalLeads').textContent = total;
+            document.getElementById('activeLeads').textContent = active;
+            document.getElementById('closedDeals').textContent = closed;
+            document.getElementById('conversionRate').textContent = conversion + '%';
+            document.getElementById('totalRevenue').textContent = 'AED ' + revenue.toLocaleString();
+            
+            // Recent activity (last 5 leads)
+            const recent = [...leads].sort((a, b) => b.id - a.id).slice(0, 5);
+            const tbody = document.getElementById('recentActivity');
+            
+            if (recent.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px; color: #6c757d;">No leads yet. Add your first lead to get started!</td></tr>';
+            } else {
+                tbody.innerHTML = recent.map(lead => {
+                    const statusClass = lead.status.toLowerCase().replace(/\s+/g, '-').replace('---', '-');
+                    return `
+                        <tr>
+                            <td>${lead.date}</td>
+                            <td><strong>${lead.clientName}</strong></td>
+                            <td><span class="status-badge status-${statusClass}">${lead.status}</span></td>
+                            <td>${lead.source}</td>
+                            <td>${lead.followupDate || 'Not set'}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+        
+        // Display all leads in table
+        function displayLeads(filteredLeads = null) {
+            const leadsToDisplay = filteredLeads || leads;
+            const tbody = document.getElementById('leadsTableBody');
+            
+            // Update count
+            document.getElementById('leadCount').textContent = leadsToDisplay.length;
+            
+            if (leadsToDisplay.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 30px; color: #6c757d;">No leads found.</td></tr>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sorted = [...leadsToDisplay].sort((a, b) => b.id - a.id);
+            
+            tbody.innerHTML = sorted.map(lead => {
+                const statusClass = lead.status.toLowerCase().replace(/\s+/g, '-').replace('---', '-');
+                const budgetFormatted = lead.budget ? 'AED ' + parseFloat(lead.budget).toLocaleString() : '-';
+                const propertyInfo = lead.propertyType || '-';
+                const areaInfo = lead.area ? `<br><small style="color: #6c757d;">${lead.area}</small>` : '';
+                
+                return `
+                    <tr>
+                        <td>${lead.date}</td>
+                        <td><strong>${lead.clientName}</strong></td>
+                        <td><a href="tel:${lead.phone}" style="color: #667eea; text-decoration: none;">${lead.phone}</a></td>
+                        <td>${lead.source}</td>
+                        <td>${propertyInfo}${areaInfo}</td>
+                        <td>${budgetFormatted}</td>
+                        <td><span class="status-badge status-${statusClass}">${lead.status}</span></td>
+                        <td class="priority-${lead.priority.toLowerCase()}">${lead.priority}</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="editLead(${lead.id})" title="Edit Lead">✏️ Edit</button>
+                            <button class="btn btn-danger" onclick="deleteLead(${lead.id})" title="Delete Lead">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+// Search leads function
+        function searchLeads() {
+            const query = document.getElementById('searchLeads').value.toLowerCase().trim();
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            let filtered = leads;
+            
+            // Apply status filter if set
+            if (statusFilter) {
+                filtered = filtered.filter(l => l.status === statusFilter);
+            }
+            
+            // Apply search query
+            if (query) {
+                filtered = filtered.filter(l => 
+                    l.clientName.toLowerCase().includes(query) ||
+                    l.phone.includes(query) ||
+                    (l.email && l.email.toLowerCase().includes(query)) ||
+                    (l.area && l.area.toLowerCase().includes(query)) ||
+                    (l.notes && l.notes.toLowerCase().includes(query))
+                );
+            }
+            
+            displayLeads(filtered);
+        }
+        
+        // Filter leads by status
+        function filterLeads() {
+            searchLeads(); // This handles both search and filter
+        }
+        
+        // Update analytics
+        function updateAnalytics() {
+            // Response time (placeholder - you can track this manually)
+            document.getElementById('avgResponseTime').textContent = '< 15 min';
+            
+            // Best source
+            const sources = {};
+            leads.forEach(l => {
+                sources[l.source] = (sources[l.source] || 0) + 1;
+            });
+            const bestSource = Object.keys(sources).length > 0 
+                ? Object.keys(sources).reduce((a, b) => sources[a] > sources[b] ? a : b)
+                : '-';
+            document.getElementById('bestSource').textContent = bestSource;
+            
+            // Viewing to close rate
+            const viewings = leads.filter(l => ['Viewing Done', 'Negotiating', 'Closed'].includes(l.status)).length;
+            const closedFromViewing = leads.filter(l => l.status === 'Closed').length;
+            const viewingRate = viewings > 0 ? ((closedFromViewing / viewings) * 100).toFixed(1) : 0;
+            document.getElementById('viewingToClose').textContent = viewingRate + '%';
+            
+            // Average deal value
+            const closedDeals = leads.filter(l => l.status === 'Closed' && l.commission);
+            const avgDeal = closedDeals.length > 0
+                ? closedDeals.reduce((sum, l) => sum + parseFloat(l.commission), 0) / closedDeals.length
+                : 0;
+            document.getElementById('avgDealValue').textContent = 'AED ' + Math.round(avgDeal).toLocaleString();
+            
+            // Source breakdown
+            const sourceDiv = document.getElementById('sourceBreakdown');
+            if (Object.keys(sources).length === 0) {
+                sourceDiv.innerHTML = '<p style="color: #6c757d; padding: 20px; text-align: center;">No data yet. Add leads to see source breakdown.</p>';
+            } else {
+                const maxCount = Math.max(...Object.values(sources));
+                sourceDiv.innerHTML = Object.keys(sources)
+                    .sort((a, b) => sources[b] - sources[a])
+                    .map(source => {
+                        const count = sources[source];
+                        const percentage = ((count / leads.length) * 100).toFixed(1);
+                        const barWidth = (count / maxCount) * 100;
+                        
+                        return `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: white; margin: 8px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <div style="flex: 1;">
+                                    <strong style="font-size: 1.1em;">${source}</strong>
+                                </div>
+                                <div style="flex: 2; margin: 0 20px;">
+                                    <div style="background: #e9ecef; height: 12px; border-radius: 6px; overflow: hidden;">
+                                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${barWidth}%; transition: width 0.3s;"></div>
+                                    </div>
+                                </div>
+                                <div style="min-width: 120px; text-align: right;">
+                                    <strong style="font-size: 1.1em;">${count}</strong> leads <span style="color: #6c757d;">(${percentage}%)</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+            }
+            
+            // Status breakdown
+            const statuses = {};
+            leads.forEach(l => {
+                statuses[l.status] = (statuses[l.status] || 0) + 1;
+            });
+            const statusDiv = document.getElementById('statusBreakdown');
+            if (Object.keys(statuses).length === 0) {
+                statusDiv.innerHTML = '<p style="color: #6c757d; padding: 20px; text-align: center;">No data yet. Add leads to see status breakdown.</p>';
+            } else {
+                const maxCount = Math.max(...Object.values(statuses));
+                statusDiv.innerHTML = Object.keys(statuses)
+                    .sort((a, b) => statuses[b] - statuses[a])
+                    .map(status => {
+                        const count = statuses[status];
+                        const percentage = ((count / leads.length) * 100).toFixed(1);
+                        const barWidth = (count / maxCount) * 100;
+                        const statusClass = status.toLowerCase().replace(/\s+/g, '-').replace('---', '-');
+                        
+                        return `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: white; margin: 8px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <div style="flex: 1;">
+                                    <span class="status-badge status-${statusClass}">${status}</span>
+                                </div>
+                                <div style="flex: 2; margin: 0 20px;">
+                                    <div style="background: #e9ecef; height: 12px; border-radius: 6px; overflow: hidden;">
+                                        <div style="background: #28a745; height: 100%; width: ${barWidth}%; transition: width 0.3s;"></div>
+                                    </div>
+                                </div>
+                                <div style="min-width: 120px; text-align: right;">
+                                    <strong style="font-size: 1.1em;">${count}</strong> leads <span style="color: #6c757d;">(${percentage}%)</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+            }
+        }
+        
+        // Export to CSV
+        function exportToCSV() {
+            if (leads.length === 0) {
+                alert('❌ No data to export! Add some leads first.');
+                return;
+            }
+            
+            const headers = [
+                'Date Added',
+                'Client Name',
+                'Phone',
+                'Email',
+                'Source',
+                'Property Type',
+                'Budget (AED)',
+                'Preferred Area',
+                'Move-in Date',
+                'Status',
+                'Priority',
+                'Commission (AED)',
+                'Follow-up Date',
+                'Notes'
+            ];
+            
+            const csvRows = [
+                headers.join(','),
+                ...leads.map(l => {
+                    return [
+                        l.date,
+                        `"${l.clientName.replace(/"/g, '""')}"`,
+                        l.phone,
+                        l.email || '',
+                        l.source,
+                        l.propertyType || '',
+                        l.budget || '',
+                        `"${(l.area || '').replace(/"/g, '""')}"`,
+                        l.moveDate || '',
+                        l.status,
+                        l.priority,
+                        l.commission || '',
+                        l.followupDate || '',
+                        `"${(l.notes || '').replace(/"/g, '""')}"`
+                    ].join(',');
+                })
+            ];
+            
+            const csv = csvRows.join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `khan_properties_leads_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            alert('✅ CSV file downloaded successfully!\n\nYou can now open it in:\n• Microsoft Excel\n• Google Sheets\n• Any spreadsheet software');
+        }
+        
+        // Export to JSON (complete backup)
+        function exportToJSON() {
+            if (leads.length === 0) {
+                alert('❌ No data to export! Add some leads first.');
+                return;
+            }
+            
+            const dataToExport = {
+                exportDate: new Date().toISOString(),
+                totalLeads: leads.length,
+                version: '1.0',
+                leads: leads
+            };
+            
+            const json = JSON.stringify(dataToExport, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `khan_properties_backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            alert('✅ Complete backup created successfully!\n\n💾 This JSON file contains all your data.\n📌 Keep it safe - you can restore from it anytime.');
+        }
+
+        // Import from JSON (bonus feature)
+        function importFromJSON() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data.leads && Array.isArray(data.leads)) {
+                            if (confirm(`Import ${data.leads.length} leads?\n\nThis will ADD to your existing data (not replace).`)) {
+                                leads = [...leads, ...data.leads];
+                                saveLeads();
+                                updateDashboard();
+                                displayLeads();
+                                updateAnalytics();
+                                alert('✅ Data imported successfully!');
+                            }
+                        } else {
+                            alert('❌ Invalid JSON file format.');
+                        }
+                    } catch (err) {
+                        alert('❌ Error reading file: ' + err.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + N = New Lead
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                document.querySelectorAll('.tab')[1].click();
+                document.getElementById('clientName').focus();
+            }
+            
+            // Ctrl/Cmd + S = Save (if on form)
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                const activeTab = document.querySelector('.tab-content.active');
+                if (activeTab && activeTab.id === 'add-lead') {
+                    e.preventDefault();
+                    document.getElementById('leadForm').dispatchEvent(new Event('submit'));
+                }
+            }
+            
+            // Ctrl/Cmd + F = Focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                const searchInput = document.getElementById('searchLeads');
+                if (searchInput) {
+                    e.preventDefault();
+                    document.querySelectorAll('.tab')[2].click();
+                    setTimeout(() => searchInput.focus(), 100);
+                }
+            }
+        });
+
+        // Auto-save reminder
+        setInterval(function() {
+            if (leads.length > 0) {
+                const lastExport = localStorage.getItem('lastExportDate');
+                const today = new Date().toISOString().split('T')[0];
+                
+                if (!lastExport || lastExport !== today) {
+                    // Don't show alert, just mark in console
+                    console.log('💡 Reminder: Export your data regularly for backup!');
+                }
+            }
+        }, 3600000); // Check every hour
+
+        // Mark export date when exporting
+        const originalExportCSV = exportToCSV;
+        exportToCSV = function() {
+            originalExportCSV();
+            localStorage.setItem('lastExportDate', new Date().toISOString().split('T')[0]);
+        };
+
+        const originalExportJSON = exportToJSON;
+        exportToJSON = function() {
+            originalExportJSON();
+            localStorage.setItem('lastExportDate', new Date().toISOString().split('T')[0]);
+        };
+
+        // Initialize on load
+        console.log('🏢 Khan Properties CRM System Loaded Successfully!');
+        console.log('💡 Keyboard Shortcuts:');
+        console.log('   Ctrl/Cmd + N = New Lead');
+        console.log('   Ctrl/Cmd + S = Save Lead (when on form)');
+        console.log('   Ctrl/Cmd + F = Search Leads');
+    </script>
+</body>
+</html>
